@@ -67,7 +67,7 @@ const Page = () => {
       <ul>
         {foods.map((item, index) => (
           <li key={index}>{item.name}: {item.count}
-            <button onClick={() => incremenet(item.id, item.count)}>+</button>
+            <button RootLayoutonClick={() => incremenet(item.id, item.count)}>+</button>
             <button onClick={() => decrement(item.id, item.count)}>-</button>
           </li>
 
