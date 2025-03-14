@@ -4,6 +4,8 @@ import React from 'react';
 import { getFirestore, collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { useState, useEffect } from 'react'
 import { initializeApp } from 'firebase/app';
+import WebcamCapture from './food_detection/capture';
+import { analyzeImage } from './food_detection/vision_service';
 
 import firebaseConfig from '../../firebase'
 
@@ -12,7 +14,9 @@ const db = getFirestore(app);
 
 const Page = () => {
 
-  const [ foods, setFoods ] = useState([])
+  const [ foods, setFoods ] = useState([]);
+  const [ imageSrc, setImageSrc ] = useState(null);
+  const [ guessFood, setGuessFood ] = useState('');
 
   const get_data = async () => {
     const foodsRef = collection(db, 'pantry');
@@ -33,6 +37,12 @@ const Page = () => {
     fetchData();
   }, []);  
 
+  useEffect(() => {
+    if (imageSrc) {
+      getResponse(imageSrc)
+    }
+  }, [imageSrc]);
+
   const updateCount = async (id, newCount) => {
     try {
       const foodsRef = doc(db, 'pantry', id);
@@ -47,13 +57,13 @@ const Page = () => {
     }
   } 
 
-  const incremenet = (id, currentCount) => {
+  const increment = (id, currentCount) => {
     console.log("Incrementing - ID:", id, "Count:", currentCount);
     updateCount(id, currentCount + 1);
   }
 
   const decrement = (id, currentCount) => {
-    console.log("Incrementing - ID:", id, "Count:", currentCount);
+    console.log("Decrementing - ID:", id, "Count:", currentCount);
 
     { currentCount > 0 ?
       (updateCount(id, currentCount - 1))
@@ -61,20 +71,30 @@ const Page = () => {
     }
   }
 
+  const getResponse = async (imageSrc) => {
+    const response = await analyzeImage(imageSrc);
+    setGuessFood(response)
+  }
+
+
   return (
     <main>
       <h1>Pantry Tracker</h1>
+
+      <WebcamCapture imageSrc={imageSrc} setImageSrc={setImageSrc} />
+      {imageSrc ? console.log(imageSrc) : console.log("Image is not there")}
+
+      <p>The food in the image is: {guessFood}</p>
+
       <ul>
         {foods.map((item, index) => (
           <li key={index}>{item.name}: {item.count}
-            <button RootLayoutonClick={() => incremenet(item.id, item.count)}>+</button>
+            <button onClick={() => increment(item.id, item.count)}>+</button>
             <button onClick={() => decrement(item.id, item.count)}>-</button>
           </li>
 
         ))      
       }
-
-
       </ul>
       
     </main>

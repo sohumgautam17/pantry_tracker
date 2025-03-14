@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
 
-const WebcamCapture = ({ onCapture }) => {
-  const [imageSrc, setImageSrc] = useState(null);
+const WebcamCapture = ({ imageSrc, setImageSrc }) => {
+//   const [imageSrc, setImageSrc] = useState(null);
   
   const videoConstraints = {
-    width: 1280,
-    height: 720,
+    width: 500,
+    height: 500,
     facingMode: 'user'
   };
   
   const capture = (getScreenshot) => {
     const screenshot = getScreenshot();
     setImageSrc(screenshot);
-    
-    if (onCapture) {
-      onCapture(screenshot);
-    }
   };
   
   const retake = () => {
@@ -35,9 +31,9 @@ const WebcamCapture = ({ onCapture }) => {
       ) : (
         <Webcam
           audio={false}
-          height={720}
+          height={500}
           screenshotFormat="image/jpeg"
-          width={1280}
+          width={500}
           videoConstraints={videoConstraints}
         >
           {({ getScreenshot }) => (
