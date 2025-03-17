@@ -20,7 +20,7 @@ const WebcamCapture = ({ imageSrc, setImageSrc }) => {
   };
   
   return (
-    <div className="webcam-container">
+    <div className="webcam-container rounded-2xl">
       {imageSrc ? (
         <div className="webcam-result">
           <img src={imageSrc} alt="webcam capture" />

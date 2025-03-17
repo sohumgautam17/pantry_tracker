@@ -78,8 +78,8 @@ const Page = () => {
 
 
   return (
-    <main>
-      <h1>Pantry Tracker</h1>
+    <main className='bg-black'>
+      <h1 className='text-white text-4xl font-helvetica '>Pantry Tracker</h1>
 
       <WebcamCapture imageSrc={imageSrc} setImageSrc={setImageSrc} />
       {imageSrc ? console.log(imageSrc) : console.log("Image is not there")}

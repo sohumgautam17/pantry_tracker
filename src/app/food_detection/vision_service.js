@@ -1,7 +1,10 @@
 
 
-
 export const analyzeImage = async (imageData) => {
+
+  const system_prompt = `You are a helpful assistant that identifies foods in images. 
+  You only provide the name of the foods in the image; if there are no foods return "There are no foods in the image". 
+  If there are multiple foods in the image listed them seperated by commas.`
 
   try {
     const API_KEY = process.env.NEXT_PUBLIC_OPEN_ROUTER_API_KEY;
@@ -27,11 +30,15 @@ export const analyzeImage = async (imageData) => {
           "model": "meta-llama/llama-3.2-11b-vision-instruct:free",
           "messages": [
             {
+              "role": "system",
+              "content": system_prompt
+            },
+            {
               "role": "user",
               "content": [
                 {
                   "type": "text",
-                  "text": "What is in this image?"
+                  "text": "What are the foods in the image?"
                 },
                 {
                   "type": "image_url",
